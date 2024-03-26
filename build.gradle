@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.3' apply false
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+subprojects {
+
+    ext {
+        springDependencyManagementVersion = "1.1.4"
+        springBootVersion = "3.2.3"
+        lombokVersion = "1.18.30"
+    }
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    plugins.withId('java') {
+//        group = 'org.example'
+//        version = '0.0.1'
+
+        dependencies {
+            annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+            compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        }
+    }
+
+    plugins.withId('io.spring.dependency-management') {
+        dependencyManagement {
+            imports {
+                mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+            }
+        }
+    }
+
+}
+
+

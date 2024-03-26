@@ -1,0 +1,4 @@
+rootProject.name = 'injection'
+
+include 'user-service'
+include 'hackcode'

@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Fetch Interceptor",
+  "version": "1.0",
+  "description": "Intercepts fetch requests",
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "<all_urls>",
+    "https://*/*",
+    "http://localhost:8777/auth/code/*"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js", "scripts/interceptRequest.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    "/scripts/interceptRequest.js"
+  ]
+}
+

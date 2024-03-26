@@ -1,0 +1,39 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <title>Authorization code</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+  <script>
+    function generateCodeVerifier() {
+      let rand = new Uint8Array(32);
+      crypto.getRandomValues(rand);
+      return base64URL(new CryptoJS.lib.WordArray.init(rand));
+    }
+    function generateCodeChallenge() {
+      let code_verifier = generateCodeVerifier();
+      localStorage.setItem("code_verifier", code_verifier);
+      console.log("code_verifier from script", code_verifier);
+      let code_challenge = base64URL(CryptoJS.SHA256(code_verifier));
+      console.log("code_challenge from script", code_challenge);
+      localStorage.setItem("code_challenge", code_challenge);
+      return code_challenge;
+    }
+    function base64URL(string) {
+      return string.toString(CryptoJS.enc.Base64).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
+    }
+  </script>
+</head>
+
+<body>
+<p>Welcome to OAuth2.0 authorization code flow.</p>
+<a id="auth" href="">Delegated Login with Auth0 </a>
+</body>
+
+<script src="app.js"></script>
+<script>
+  authorize();
+</script>
+
+</html>
