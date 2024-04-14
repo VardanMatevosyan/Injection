@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+
+  web:
+    image: oauth2_client:latest
+    ports:
+      - "8081:80"
+    volumes:
+      - ./oauth2.0_client_app/index.html:/usr/share/nginx/html/index.html
+      - ./oauth2.0_client_app/js/app.js:/usr/share/nginx/html/app.js
+      
+  user-service:
+    image: user-service:latest
+    ports:
+      - "9777:9777"
+
+      
+
