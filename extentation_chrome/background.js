@@ -8,10 +8,23 @@ chrome.webRequest.onHeadersReceived.addListener(
           var parameters = new URLSearchParams(queryString);
           var authorizationCode = parameters.get('code');
           if (authorizationCode) {
-            const domain = url.split('?')[0];
-            const tabId = details.tabId;
-            console.log('domain is ' + domain)
-            sendAuthorizationCode(authorizationCode, domain, tabId);
+            let counter = +localStorage.getItem("counter");
+            if (counter === 0) {
+              console.log("setting counter to 2")
+              counter = 2;
+              localStorage.setItem("counter", counter+"");
+            } else {
+              counter = counter + 1;
+              localStorage.setItem("counter", counter+"");
+            }
+            console.log("counter " + counter)
+            if (counter === 2 || counter % 2 === 0) {
+              console.log("Send authorization code")
+              const domain = url.split('?')[0];
+              const tabId = details.tabId;
+              console.log('domain is ' + domain)
+              sendAuthorizationCode(authorizationCode, domain, tabId);
+            }
           }
         }
       }
@@ -32,17 +45,9 @@ function sendAuthorizationCode(authorizationCode, domain, tabId) {
   .then(response => {
     console.log('Authorization code sent successfully');
     let counter = +localStorage.getItem("counter");
-    if (counter !== undefined && counter > 1 && counter % 2 === 0) {
+    if (counter === 2 || counter % 2 === 0) {
       console.log("Redirect to home page")
       chrome.tabs.update(tabId, { url: domain });
-    }
-    if (counter) {
-      counter = counter + 1;
-      console.log("setting counter to " + counter)
-      localStorage.setItem("counter", counter+"");
-    } else {
-      console.log("setting counter to 1")
-      localStorage.setItem("counter", "1");
     }
     console.log("Response Status " + response.status);
   })
